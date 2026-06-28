@@ -1,9 +1,9 @@
 export const siteConfig = {
   name: "Langalis",
   url: "https://langalis.com",
-  ogImage: "https://langalis.com/og.jpg",
+  ogImage: "https://langalis.com/opengraph-image.png",
   description:
-    "Learn languages your way, at your pace. Master any language with personalized lessons and speaking practice.",
+    "Practice speaking, reading, writing, and listening with personalized lessons. Achieve fluency at your own pace.",
   links: {
     twitter: "https://twitter.com/langalis",
     github: "https://github.com/langalis",

@@ -11,8 +11,10 @@ export function SiteHeader() {
           <MobileNav className="flex lg:hidden" items={siteConfig.navItems} />
           <MainNav className="hidden lg:flex" items={siteConfig.navItems} />
           <div className="ml-auto flex items-center gap-2">
-            <Button variant="outline">Sign In</Button>
-            <Button>Get Started</Button>
+            <Button variant="outline">Login</Button>
+            <Button className="text-primary-foreground dark:text-foreground">
+              Get started
+            </Button>
           </div>
         </div>
       </div>

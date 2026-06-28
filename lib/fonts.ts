@@ -1,17 +1,16 @@
-import { Bowlby_One_SC, DM_Mono } from "next/font/google";
+import { Lexend, Sora } from "next/font/google";
 
-const bowlby = Bowlby_One_SC({
+const sora = Sora({
   subsets: ["latin"],
-  variable: "--font-bowlby-sc",
+  variable: "--font-sora",
   display: "swap",
-  weight: "400",
+  weight: ["400", "500", "600", "700"],
 });
 
-const dmMono = DM_Mono({
-  weight: ["400", "500"],
+const lexend = Lexend({
   subsets: ["latin"],
-  variable: "--font-dm-mono",
+  variable: "--font-lexend",
   display: "swap",
 });
 
-export const fontVariables = `${bowlby.variable} ${dmMono.variable}`;
+export const fontVariables = `${sora.variable} ${lexend.variable}`;

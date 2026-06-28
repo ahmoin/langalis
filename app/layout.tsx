@@ -18,14 +18,20 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || siteConfig.url),
   description: siteConfig.description,
-  keywords: ["Next.js", "React", "Tailwind CSS", "Components", "shadcn"],
+  keywords: [
+    "Education",
+    "Language Learning",
+    "Vocabulary Builder",
+    "ESL",
+    "Grammar Lessons",
+  ],
   authors: [
     {
-      name: "shadcn",
-      url: "https://shadcn.com",
+      name: siteConfig.name,
+      url: siteConfig.url,
     },
   ],
-  creator: "shadcn",
+  creator: siteConfig.name,
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -35,7 +41,7 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_APP_URL}/opengraph-image.png`,
+        url: siteConfig.ogImage,
         width: 1200,
         height: 630,
         alt: siteConfig.name,
@@ -46,8 +52,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteConfig.name,
     description: siteConfig.description,
-    images: [`${process.env.NEXT_PUBLIC_APP_URL}/opengraph-image.png`],
-    creator: "@shadcn",
+    images: [siteConfig.ogImage],
+    creator: "@ahmoin0",
   },
   icons: {
     icon: "/favicon.ico",

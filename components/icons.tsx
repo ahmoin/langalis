@@ -165,7 +165,7 @@ export function getIconForLanguage(language: string) {
     French: () => <Icons.france />,
     German: () => <Icons.germany />,
     Japanese: () => <Icons.japan />,
-    Mandarin: () => <Icons.china />,
+    Chinese: () => <Icons.china />,
     Korean: () => <Icons.korea />,
   };
 

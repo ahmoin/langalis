@@ -8,22 +8,22 @@ import { MessageScrollerItem } from "@/components/ui/message-scroller";
 import type { MessageAnimationPreset } from "@/lib/message-animations";
 import { MESSAGE_ANIMATIONS } from "@/lib/message-animations";
 
-type MessageAnimatedPart = {
-  type: string;
+interface MessageAnimatedPart {
   text?: string;
-};
+  type: string;
+}
 
-type MessageAnimatedMessage = {
+interface MessageAnimatedMessage {
   id: string;
+  parts?: readonly MessageAnimatedPart[];
   role: string;
   text?: string;
-  parts?: ReadonlyArray<MessageAnimatedPart>;
-};
+}
 
-type MessageAnimatedTextPart = {
+interface MessageAnimatedTextPart {
   key: string;
   text: string;
-};
+}
 
 const PARAGRAPH_SEPARATOR = /\n\s*\n/;
 const MotionMessageScrollerItem = motion.create(MessageScrollerItem);

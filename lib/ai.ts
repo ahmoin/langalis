@@ -29,63 +29,63 @@ type ToolState =
   | "output-error"
   | "output-denied";
 
-type ToolPartOptions = {
-  toolCallId?: string;
-  title?: string;
-  toolMetadata?: JsonRecord;
-  providerExecuted?: boolean;
-  state?: ToolState;
-  input?: unknown;
-  output?: unknown;
-  errorText?: string;
+interface ToolPartOptions {
   approval?: {
     id: string;
     approved?: boolean;
     reason?: string;
     isAutomatic?: boolean;
   };
-};
+  errorText?: string;
+  input?: unknown;
+  output?: unknown;
+  providerExecuted?: boolean;
+  state?: ToolState;
+  title?: string;
+  toolCallId?: string;
+  toolMetadata?: JsonRecord;
+}
 
 type FilePartInput = Omit<FileUIPart, "type"> & {
   type?: FileUIPart["type"];
 };
 
-type ChatUserOptions<METADATA> = {
-  id?: string;
-  metadata?: METADATA;
+interface ChatUserOptions<METADATA> {
   files?: FilePartInput[];
-};
-
-type ChatAssistantOptions<METADATA> = {
   id?: string;
   metadata?: METADATA;
-};
+}
 
-type ChatGetOptions = {
+interface ChatAssistantOptions<METADATA> {
+  id?: string;
+  metadata?: METADATA;
+}
+
+interface ChatGetOptions {
   count?: number;
-};
+}
 
-type ChatDataGetOptions = {
+interface ChatDataGetOptions {
   count?: number;
-};
+}
 
-type ChatNextOptions<
+interface ChatNextOptions<
   METADATA,
   DATA_PARTS extends UIDataTypes,
   TOOLS extends UITools,
-> = {
-  after?: Array<UIMessage<METADATA, DATA_PARTS, TOOLS>>;
-};
+> {
+  after?: UIMessage<METADATA, DATA_PARTS, TOOLS>[];
+}
 
-type ChatTransportOptions = {
+interface ChatTransportOptions {
   chunkDelayMs?: number;
-};
+}
 
-type StreamTextOptions = {
-  id?: string;
+interface StreamTextOptions {
   delayMs?: number;
+  id?: string;
   mode?: "stream" | "instant";
-};
+}
 
 type StreamDataPart<DATA_PARTS extends UIDataTypes> = DataUIPart<DATA_PARTS> & {
   transient?: boolean;
@@ -97,9 +97,9 @@ type ChatDataPart<DATA_PARTS extends UIDataTypes> =
     delayMs: number;
   };
 
-type DataPartOptions = {
+interface DataPartOptions {
   id?: string;
-};
+}
 
 type ToolWriterOptions = ToolPartOptions & {
   dynamic?: boolean;
@@ -188,30 +188,30 @@ type ChatWriterEvent<DATA_PARTS extends UIDataTypes, TOOLS extends UITools> =
       kind: "step-start";
     };
 
-type ChatTurn<
+interface ChatTurn<
   METADATA,
   DATA_PARTS extends UIDataTypes,
   TOOLS extends UITools,
-> = {
-  role: UIMessage<METADATA, DATA_PARTS, TOOLS>["role"];
-  message: UIMessage<METADATA, DATA_PARTS, TOOLS>;
+> {
   events: ChatWriterEvent<DATA_PARTS, TOOLS>[];
-};
+  message: UIMessage<METADATA, DATA_PARTS, TOOLS>;
+  role: UIMessage<METADATA, DATA_PARTS, TOOLS>["role"];
+}
 
-type YieldMessagePartsOptions = {
+interface YieldMessagePartsOptions {
   includeEmpty?: boolean;
-};
+}
 
 type StreamMessagePartsOptions = YieldMessagePartsOptions & {
   delayMs?: number;
 };
 
-type AiMessageFakerOptions = {
+interface AiMessageFakerOptions {
   messageIdPrefix?: string;
-  toolCallIdPrefix?: string;
-  sourceIdPrefix?: string;
   now?: Date | string;
-};
+  sourceIdPrefix?: string;
+  toolCallIdPrefix?: string;
+}
 
 const TEXT_PARTS = [
   "Summarize the uploaded receipt.",
@@ -321,7 +321,7 @@ function replaceOrPushPart<
   DATA_PARTS extends UIDataTypes,
   TOOLS extends UITools,
 >(
-  parts: Array<UIMessagePart<DATA_PARTS, TOOLS>>,
+  parts: UIMessagePart<DATA_PARTS, TOOLS>[],
   part: UIMessagePart<DATA_PARTS, TOOLS>
 ) {
   if ("id" in part && part.id) {
@@ -346,8 +346,8 @@ function materializeEvents<
   TOOLS extends UITools,
 >(
   events: ChatWriterEvent<DATA_PARTS, TOOLS>[]
-): Array<UIMessagePart<DATA_PARTS, TOOLS>> {
-  const parts: Array<UIMessagePart<DATA_PARTS, TOOLS>> = [];
+): UIMessagePart<DATA_PARTS, TOOLS>[] {
+  const parts: UIMessagePart<DATA_PARTS, TOOLS>[] = [];
 
   for (const event of events) {
     if (event.kind === "text") {
@@ -642,9 +642,9 @@ export function createAiMessageFaker<
 
     dataUpdates<NAME extends keyof DATA_PARTS & string>(
       name: NAME,
-      updates: Array<DATA_PARTS[NAME]>,
+      updates: DATA_PARTS[NAME][],
       options: Required<DataPartOptions>
-    ): Array<DataUIPart<DATA_PARTS>> {
+    ): DataUIPart<DATA_PARTS>[] {
       return updates.map((data) =>
         parts.data({
           type: `data-${name}`,
@@ -690,7 +690,7 @@ export function createAiMessageFaker<
 
   function message(
     role: UIMessage<METADATA, DATA_PARTS, TOOLS>["role"],
-    messageParts: Array<UIMessagePart<DATA_PARTS, TOOLS>>,
+    messageParts: UIMessagePart<DATA_PARTS, TOOLS>[],
     overrides: Partial<UIMessage<METADATA, DATA_PARTS, TOOLS>> = {}
   ): UIMessage<METADATA, DATA_PARTS, TOOLS> {
     return {
@@ -707,15 +707,15 @@ export function createAiMessageFaker<
   ) {
     return message(
       "user",
-      [parts.text(text)] as Array<UIMessagePart<DATA_PARTS, TOOLS>>,
+      [parts.text(text)] as UIMessagePart<DATA_PARTS, TOOLS>[],
       overrides
     );
   }
 
   function assistant(
-    messageParts: Array<UIMessagePart<DATA_PARTS, TOOLS>> = [
+    messageParts: UIMessagePart<DATA_PARTS, TOOLS>[] = [
       parts.text(),
-    ] as Array<UIMessagePart<DATA_PARTS, TOOLS>>,
+    ] as UIMessagePart<DATA_PARTS, TOOLS>[],
     overrides: Partial<UIMessage<METADATA, DATA_PARTS, TOOLS>> = {}
   ) {
     return message("assistant", messageParts, overrides);
@@ -727,7 +727,7 @@ export function createAiMessageFaker<
   ) {
     return message(
       "system",
-      [parts.text(text)] as Array<UIMessagePart<DATA_PARTS, TOOLS>>,
+      [parts.text(text)] as UIMessagePart<DATA_PARTS, TOOLS>[],
       overrides
     );
   }
@@ -736,7 +736,7 @@ export function createAiMessageFaker<
     role: UIMessage<METADATA, DATA_PARTS, TOOLS>["role"] = "assistant",
     overrides: Partial<UIMessage<METADATA, DATA_PARTS, TOOLS>> = {}
   ) {
-    const messageParts: Array<UIMessagePart<DATA_PARTS, TOOLS>> = [];
+    const messageParts: UIMessagePart<DATA_PARTS, TOOLS>[] = [];
 
     const api = {
       text(text?: string, options?: Pick<TextUIPart, "state">) {
@@ -1017,9 +1017,7 @@ export function createAiMessageFaker<
     return writer;
   }
 
-  function eventsFromParts(
-    messageParts: Array<UIMessagePart<DATA_PARTS, TOOLS>>
-  ) {
+  function eventsFromParts(messageParts: UIMessagePart<DATA_PARTS, TOOLS>[]) {
     const events: ChatWriterEvent<DATA_PARTS, TOOLS>[] = [];
 
     for (const part of messageParts) {
@@ -1443,8 +1441,8 @@ export function createAiMessageFaker<
   }
 
   function chat() {
-    const turns: Array<ChatTurn<METADATA, DATA_PARTS, TOOLS>> = [];
-    const dataParts: Array<ChatDataPart<DATA_PARTS>> = [];
+    const turns: ChatTurn<METADATA, DATA_PARTS, TOOLS>[] = [];
+    const dataParts: ChatDataPart<DATA_PARTS>[] = [];
     const pendingEvents: ChatWriterEvent<DATA_PARTS, TOOLS>[] = [];
     let cursor = 0;
     let dataDelayMs = 0;
@@ -1460,7 +1458,7 @@ export function createAiMessageFaker<
     }
 
     function findNextAssistantTurn(
-      messages: Array<UIMessage<METADATA, DATA_PARTS, TOOLS>>,
+      messages: UIMessage<METADATA, DATA_PARTS, TOOLS>[],
       messageId?: string
     ) {
       if (messageId) {
@@ -1484,7 +1482,7 @@ export function createAiMessageFaker<
     }
 
     function findLatestScriptedIndex(
-      messages: Array<UIMessage<METADATA, DATA_PARTS, TOOLS>>
+      messages: UIMessage<METADATA, DATA_PARTS, TOOLS>[]
     ) {
       const messageIds = new Set(messages.map((message) => message.id));
       let latestScriptedIndex = -1;
@@ -1496,7 +1494,7 @@ export function createAiMessageFaker<
       }
 
       if (latestScriptedIndex === -1) {
-        const lastMessage = messages[messages.length - 1];
+        const lastMessage = messages.at(-1);
         latestScriptedIndex = turns.findIndex(
           (turn) =>
             turn.message.role === lastMessage?.role &&
@@ -1508,7 +1506,7 @@ export function createAiMessageFaker<
     }
 
     function findNextUserTurn(
-      messages: Array<UIMessage<METADATA, DATA_PARTS, TOOLS>>
+      messages: UIMessage<METADATA, DATA_PARTS, TOOLS>[]
     ) {
       const latestScriptedIndex = findLatestScriptedIndex(messages);
 
@@ -1523,7 +1521,7 @@ export function createAiMessageFaker<
         const messageParts = [
           parts.text(text),
           ...(options.files ?? []).map(normalizeFilePart),
-        ] as Array<UIMessagePart<DATA_PARTS, TOOLS>>;
+        ] as UIMessagePart<DATA_PARTS, TOOLS>[];
         const userMessage = message("user", messageParts, {
           id: options.id,
           metadata: options.metadata,
@@ -1540,14 +1538,14 @@ export function createAiMessageFaker<
       assistant(
         input:
           | string
-          | Array<UIMessagePart<DATA_PARTS, TOOLS>>
+          | UIMessagePart<DATA_PARTS, TOOLS>[]
           | ((context: {
               writer: ReturnType<typeof createWriter>;
             }) => void) = DEFAULT_TEXT_PART,
         options: ChatAssistantOptions<METADATA> = {}
       ) {
         const events = takePendingEvents();
-        let messageParts: Array<UIMessagePart<DATA_PARTS, TOOLS>>;
+        let messageParts: UIMessagePart<DATA_PARTS, TOOLS>[];
 
         if (typeof input === "string") {
           const writer = createWriter(events);
@@ -1688,7 +1686,7 @@ export function createAiMessageFaker<
     builder,
     messageBuilder: builder,
     chat,
-    thread(...messages: Array<UIMessage<METADATA, DATA_PARTS, TOOLS>>) {
+    thread(...messages: UIMessage<METADATA, DATA_PARTS, TOOLS>[]) {
       return messages;
     },
   };

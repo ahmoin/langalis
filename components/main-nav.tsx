@@ -20,7 +20,7 @@ export function MainNav({
       {items.map((item) => (
         <Button
           asChild
-          className="px-2.5"
+          className="px-2.5 hover:bg-transparent hover:text-primary dark:hover:bg-transparent"
           key={item.href}
           size="sm"
           variant="ghost"

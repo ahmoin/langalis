@@ -160,7 +160,7 @@ export function MessageScrollerDemo() {
                   {messages.map((message) => (
                     <MessageAnimated
                       animationPreset={popPreset}
-                      assistantVariant="muted"
+                      assistantVariant="outline"
                       key={message.id}
                       message={message}
                       scrollAnchor={message.role === "user"}

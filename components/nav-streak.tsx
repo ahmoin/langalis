@@ -10,7 +10,7 @@ export function NavStreak({ streak }: { streak: number }) {
     <div className="flex items-center gap-2 px-3 py-2">
       <Flame
         className={cn(
-          "h-4 w-4",
+          "size-4",
           hasStreak
             ? "fill-orange-500 text-orange-500"
             : "text-muted-foreground"

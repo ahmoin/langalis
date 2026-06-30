@@ -7,6 +7,7 @@ export default async function Page() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+
   return (
     <>{session ? <DashboardSection session={session} /> : <HeroSection />}</>
   );

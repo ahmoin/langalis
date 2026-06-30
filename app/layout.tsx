@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@/components/analytics";
+import { SpeedInsights } from "@/components/speed-insights";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
@@ -102,6 +103,7 @@ export default function RootLayout({
           </TooltipProvider>
           <TailwindIndicator />
           <Analytics />
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>

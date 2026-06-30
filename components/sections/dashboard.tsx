@@ -1,37 +1,32 @@
 "use client";
 
-import { MessageScrollerDemo } from "@/components/message-scroller-demo";
-import { NavUser } from "@/components/nav-user";
+import { AppSidebar } from "@/components/app-sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import type { Session } from "@/lib/auth-client";
 
 export function DashboardSection({ session }: { session: Session | null }) {
   return (
-    <div className="flex min-h-screen bg-background">
-      <aside className="hidden w-64 border-border border-r bg-card px-6 py-8 md:flex md:flex-col">
-        {session && (
-          <div className="mt-auto">
-            <NavUser
-              user={{
-                name: session.user.name,
-                email: session.user.email,
-                avatar:
-                  session.user.image ||
-                  `https://avatar.vercel.sh/${session.user.email}`,
-              }}
-            />
+    <SidebarProvider>
+      <AppSidebar session={session} />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
           </div>
-        )}
-      </aside>
-
-      <main className="flex flex-1 flex-col">
-        <div className="flex-1 overflow-auto p-6 md:p-8">
-          <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 lg:grid-cols-3">
-            <div className="lg:col-span-2">
-              <MessageScrollerDemo />
-            </div>
+        </header>
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+            <div className="aspect-video rounded-xl bg-muted/50" />
+            <div className="aspect-video rounded-xl bg-muted/50" />
+            <div className="aspect-video rounded-xl bg-muted/50" />
           </div>
+          <div className="min-h-screen flex-1 rounded-xl bg-muted/50 md:min-h-min" />
         </div>
-      </main>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

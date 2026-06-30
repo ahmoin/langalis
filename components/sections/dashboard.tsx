@@ -1,64 +1,37 @@
-import { Smartphone, Target, Users } from "lucide-react";
-import {
-  Item,
-  ItemDescription,
-  ItemGroup,
-  ItemMedia,
-  ItemTitle,
-} from "@/components/ui/item";
+"use client";
 
-export function DashboardSection() {
+import { MessageScrollerDemo } from "@/components/message-scroller-demo";
+import { NavUser } from "@/components/nav-user";
+import type { Session } from "@/lib/auth-client";
+
+export function DashboardSection({ session }: { session: Session | null }) {
   return (
-    <div className="flex flex-col">
-      <section className="relative min-h-screen bg-background">
-        <div className="relative mx-auto flex max-w-6xl flex-col items-center justify-between gap-12 px-6 py-24 md:flex-row md:items-start">
-          <div className="flex flex-col items-center text-center md:w-1/2 md:items-start md:text-left">
-            <h1 className="mb-6 text-5xl text-foreground md:text-7xl">
-              Your dashboard
-            </h1>
+    <div className="flex min-h-screen bg-background">
+      <aside className="hidden w-64 border-border border-r bg-card px-6 py-8 md:flex md:flex-col">
+        {session && (
+          <div className="mt-auto">
+            <NavUser
+              user={{
+                name: session.user.name,
+                email: session.user.email,
+                avatar:
+                  session.user.image ||
+                  `https://avatar.vercel.sh/${session.user.email}`,
+              }}
+            />
+          </div>
+        )}
+      </aside>
+
+      <main className="flex flex-1 flex-col">
+        <div className="flex-1 overflow-auto p-6 md:p-8">
+          <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <MessageScrollerDemo />
+            </div>
           </div>
         </div>
-
-        <div className="mx-auto max-w-6xl px-6 py-24">
-          <ItemGroup className="grid w-full grid-cols-1 gap-8 md:grid-cols-3">
-            <Item className="flex-col bg-card p-8">
-              <div className="mb-4 flex w-full items-center gap-4">
-                <ItemMedia>
-                  <Smartphone className="size-10 text-primary" />
-                </ItemMedia>
-                <ItemTitle className="text-xl">Learn Anywhere</ItemTitle>
-              </div>
-              <ItemDescription>
-                Access lessons on your phone, tablet, or desktop anytime.
-              </ItemDescription>
-            </Item>
-
-            <Item className="flex-col bg-card p-8">
-              <div className="mb-4 flex w-full items-center gap-4">
-                <ItemMedia>
-                  <Target className="size-10 text-primary" />
-                </ItemMedia>
-                <ItemTitle className="text-xl">Stay Motivated</ItemTitle>
-              </div>
-              <ItemDescription>
-                Earn streaks, unlock achievements, and track your progress.
-              </ItemDescription>
-            </Item>
-
-            <Item className="flex-col bg-card p-8">
-              <div className="mb-4 flex w-full items-center gap-4">
-                <ItemMedia>
-                  <Users className="size-10 text-primary" />
-                </ItemMedia>
-                <ItemTitle className="text-xl">Practice Speaking</ItemTitle>
-              </div>
-              <ItemDescription>
-                Pwered by the latest AI technology to have chats that adapts.
-              </ItemDescription>
-            </Item>
-          </ItemGroup>
-        </div>
-      </section>
+      </main>
     </div>
   );
 }

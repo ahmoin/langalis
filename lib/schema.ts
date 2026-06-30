@@ -9,6 +9,7 @@ export const user = sqliteTable("user", {
     .default(false)
     .notNull(),
   image: text("image"),
+  streak: integer("streak").default(0).notNull(),
   createdAt: integer("createdAt", { mode: "timestamp" })
     .$defaultFn(() => new Date())
     .notNull(),
@@ -89,9 +90,24 @@ export const verification = sqliteTable(
   (table) => [index("verification_identifier_idx").on(table.identifier)]
 );
 
+export const conversation = sqliteTable(
+  "conversation",
+  {
+    id: text("id").primaryKey(),
+    userId: text("userId")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    completedAt: integer("completedAt", { mode: "timestamp" })
+      .$defaultFn(() => new Date())
+      .notNull(),
+  },
+  (table) => [index("conversation_userId_idx").on(table.userId)]
+);
+
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
+  conversations: many(conversation),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -104,6 +120,13 @@ export const sessionRelations = relations(session, ({ one }) => ({
 export const accountRelations = relations(account, ({ one }) => ({
   user: one(user, {
     fields: [account.userId],
+    references: [user.id],
+  }),
+}));
+
+export const conversationRelations = relations(conversation, ({ one }) => ({
+  user: one(user, {
+    fields: [conversation.userId],
     references: [user.id],
   }),
 }));

@@ -180,7 +180,7 @@ export function MessageScrollerDemo() {
             // style={{ width: `${completionPercentage}%` }}
             value={completionPercentage}
           />
-          <span className="absolute right-0 font-semibold text-primary-foreground text-xs">
+          <span className="absolute right-0 font-semibold text-xs">
             {completionPercentage}%
           </span>
         </div>
